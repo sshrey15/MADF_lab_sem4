@@ -1,4 +1,5 @@
-#include <stdio.h>
+#include<stdio.h>
+
 int ar[100];
 
 void minmax(int i, int j, int *mx, int *mn)
