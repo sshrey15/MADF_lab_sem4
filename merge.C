@@ -1,162 +1,73 @@
-#include<stdio.h>
-#include<stdlib.h>
-char arrOne[20], arrTwo[20], separatorOne[20];
-int arr1[20], arr2[20], separator2[20];
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 20
+char sym[MAX];
 int size;
 
-void createSeparatorOne() {
-    for (int i = 0; i < size; i++) {
-        separatorOne[i] = ',';
+void display(char arr[])
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf(" %c ", arr[i]);
+        if (sym[i] != '\0')
+            printf(" %c ", sym[i]);
     }
-}
-void showChar() {
-    int i;
-        printf("(");
-        for (i = 0; i < size - 1; i++) {
-            printf("%c%c", arrOne[i], separatorOne[i]);
-        }
-        printf("%c)\n", arrOne[i]);
+    printf("\n");
 }
 
-void mergeCharArrays(int low, int mid, int high) {
-    int i = low, j = mid + 1, k = low;
-    while (i <= mid && j <= high) {
-        if (arrOne[i] <= arrOne[j])
-            arrTwo[k++] = arrOne[i++];
-        else
-            arrTwo[k++] = arrOne[j++];
+void merge(char arr[], char temp[], int low1, int high1, int low2, int high2)
+{
+    int i = low1, j = low2, k = low1;
+    while (i <= high1 && j <= high2)
+    {
+        if (arr[i] <= arr[j])
+            temp[k++] = arr[i++];
+        else if (arr[i] > arr[j])
+            temp[k++] = arr[j++];
     }
-
-    if (i > mid) {
-        while (j <= high)
-            arrTwo[k++] = arrOne[j++];
-    } else {
-        while (i <= mid)
-            arrTwo[k++] = arrOne[i++];
-    }
-
-    for (i = low; i <= high; i++)
-        arrOne[i] = arrTwo[i];
-
-    separatorOne[mid] = ',';
+    while (i <= high1)
+        temp[k++] = arr[i++];
+    while (j <= high2)
+        temp[k++] = arr[j++];
+    sym[high1] = ',';
 }
-void mergeSortChar(int low, int high) {
-    if (low < high) {
+
+void copy(char arr[], char temp[], int low, int high)
+{
+    for (int i = low; i <= high; i++)
+        temp[i] = arr[i];
+}
+
+void mergeSortRecursive(char arr[], char temp[], int low, int high)
+{
+    if (low < high)
+    {
         int mid = (low + high) / 2;
-        separatorOne[mid] = '|';
-
-        mergeSortChar(low, mid);
-        showChar();
-        mergeSortChar(mid + 1, high);
-        if (mid + 1 != high)
-            showChar();
-        mergeCharArrays(low, mid, high);
+        sym[mid] = '|';
+        display(arr);
+        mergeSortRecursive(arr, temp, low, mid);
+        mergeSortRecursive(arr, temp, mid + 1, high);
+        merge(arr, temp, low, mid, mid + 1, high);
+        copy(temp, arr, low, high);
+        display(arr);
     }
 }
 
-void createSeparator2() {
-    for (int i = 0; i < size; i++) {
-        separator2[i] = ',';
-    }
+void mergeSort(char arr[], int low, int high)
+{
+    char temp[MAX];
+    for (int i = 0; i < MAX; i++)
+        sym[i] = ',';
+    size = high - low + 1;
+    mergeSortRecursive(arr, temp, low, high);
 }
 
-void showInt() {
-    int i;
-        printf("(");
-        for (i = 0; i < size - 1; i++) {
-            printf("%d%c", arr1[i], separator2[i]);
-        }
-        printf("%d)\n", arr1[i]);
-}
-
-
-void mergeIntArrays(int low, int mid, int high) {
-    int i = low, j = mid + 1, k = low;
-    while (i <= mid && j <= high) {
-        if (arr1[i] >= arr1[j])
-            arr2[k++] = arr1[i++];
-        else
-            arr2[k++] = arr1[j++];
-    }
-
-    if (i > mid) {
-        while (j <= high)
-            arr2[k++] = arr1[j++];
-    } else {
-        while (i <= mid)
-            arr2[k++] = arr1[i++];
-    }
-
-    for (i = low; i <= high; i++)
-        arr1[i] = arr2[i];
-
-    separator2[mid] = ',';
-}
-
-
-
-void mergeSortInt(int low, int high) {
-    if (low < high) {
-        int mid = (low + high) / 2;
-        separator2[mid] = '|';
-
-        mergeSortInt(low, mid);
-        showInt();
-        mergeSortInt(mid + 1, high);
-        if (mid + 1 != high)
-            showInt();
-        mergeIntArrays(low, mid, high);
-    }
-}
-
-int main() {
-
-    int i, choice;
-    char element;int item;
-    while (1) {
-        printf("\n OPTIONS \n1-Character array(ascending)\n 2-Integer array(descending)\n 3-Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        switch (choice) {
-
-            case 1:
-                printf("Enter the no. of elements to be entered: ");
-                scanf("%d", &size);
-                printf("Enter the  %d elements: \n ",size );
-                for (i = 0; i < size; i++) {
-                    scanf(" %c", &element);
-                    arrOne[i] = element;
-                }
-
-                createSeparatorOne();
-                showChar(1);
-                mergeSortChar(0, size - 1);
-                showChar();
-                break;
-
-            case 2:
-                printf("Enter the no. of elements to be entered: ");
-                scanf("%d", &size);
-                printf("Enter the  %d elements:  \n",size );
-                for (i = 0; i < size; i++) {
-
-                    scanf("%d", &item);
-                    arr1[i] = item;
-                }
-
-                createSeparator2();
-                showInt(1);
-                mergeSortInt(0, size - 1);
-                showInt();
-                break;
-
-            case 3:
-                exit(1);
-                break;
-
-            default:
-                printf("Enter Valid choice\n");
-                break;
-        }
-    }
+int main()
+{
+    char arr[] = {'R', 'W', 'H', 'A', 'V', 'T', 'M', 'A', 'U', 'D', 'U'};
+    int arr_size = sizeof(arr) / sizeof(arr[0]);
+    printf("\n\n");
+    mergeSort(arr, 0, arr_size - 1);
+    printf("\n");
+    return 0;
 }

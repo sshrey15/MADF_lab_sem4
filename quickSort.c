@@ -1,81 +1,44 @@
- #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+int partition(int *arr, int low, int high) {
+    int pivot = arr[low];
+    int i = low;
+    int j = high;
+    do {
+        do {i++;} while (arr[i] < pivot);
+        do {j--;} while (arr[j] > pivot);
+        if (i < j) {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }} while (i < j);
+    arr[low] = arr[j];
+    arr[j] = pivot;
+    return j;}
 
-int ar[9];
-
-void interchange(int ar[], int i, int j)
-{
-    ar[i] = ar[i] + ar[j];
-    ar[j] = ar[i] - ar[j];
-    ar[i] = ar[i] - ar[j];
-}
-
-int partition(int ar[], int m, int p)
-{
-    int v, i, j;
-    v = ar[m];
-    i = m;
-    j = p;
-
-    do
-    {
-        do
-        {
-            i = i + 1;
-        } while (ar[i] < v);
-
-        do
-        {
-            j = j - 1;
-        } while (ar[j] > v);
-
-        if (i < j)
-        {
-            interchange(ar, i, j);
+void quicksort(int *arr, int low, int high) {
+    if (low < high - 1) {
+int pivot=arr[low];
+           for (int i = 0; i < 10; i++) {
+            if(arr[i]==pivot)printf(" |%d| ", arr[i]);
+            else
+            printf("%d ", arr[i]);
         }
-    } while (i < j);
-
-    ar[m] = ar[j];
-    ar[j] = v;
-    return j;
-}
-
-void quicksort(int p, int q)
-{
-    if (p < q)
-    {
-        int j = partition(ar, p, q + 1);
-        quicksort(p, j - 1);
-         printf("[");
-        for (int i = 0; i < 9; i++)
-        {
-            printf(" %d ", ar[i]);
-        }
-        printf("]\n");
-
-        quicksort(j + 1, q);
-        printf("[");
-        for (int i = 0; i < 9; i++)
-        {
-            printf(" %d ", ar[i]);
-        }
-        printf("]\n");
+        int j = partition(arr, low, high);
+                printf("i: %d, j: %d\n", low, high);
+           printf("\n");
+        quicksort(arr, low, j);
+        quicksort(arr, j + 1, high);
     }
 }
+int main() {
+    int arr[10] = {43,-12,11,58,-5,29,65,-17,37};
+    quicksort(arr, 0, 10);
 
-int main()
-{
-    printf("Enter the array elements:\n");
-    for (int i = 0; i < 9; i++)
-    {
-        scanf("%d", &ar[i]);
-    }
-
-    int start, end;
-    printf("Enter start and end positions: ");
-    scanf("%d%d", &start, &end);
-
-    printf("Array after each iteration:\n");
-    quicksort(start, end);
-
-    return 0;
+    printf("Sorted array: ");
+    for (int i = 0; i < 10; i++) {
+        printf("%d ", arr[i]);
 }
+  return 0;
+}
+
